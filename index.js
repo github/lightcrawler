@@ -20,10 +20,24 @@ module.exports = (options) => {
     return links
   }
 
-  const lighthouseQueue = queue(runLighthouse, 5);
+  let totalErrorCount = 0
+
+  const lighthouseQueue = queue((url, callback) => {
+    runLighthouse(url, (errorCount) => {
+      totalErrorCount += errorCount
+      callback()
+    })
+  }, 5)
 
   crawler.on('fetchcomplete', (queueItem, responseBuffer, response) => {
     lighthouseQueue.push(queueItem.url)
+  })
+  crawler.once('complete', () => {
+    lighthouseQueue.drain = () => {
+      if (totalErrorCount > 0) {
+        process.exit(1)
+      }
+    }
   })
 
   crawler.start()
@@ -47,13 +61,14 @@ function runLighthouse (url, callback) {
     output += data
   })
   lighthouse.once('close', () => {
-    callback()
+    let errorCount = 0
 
     const report = JSON.parse(output)
 
     report.reportCategories.forEach((category) => {
       category.audits.forEach((audit) => {
         if (audit.score !== 100) {
+          errorCount++
           console.log(`${url} failed ${audit.id}`)
 
           const {value} = audit.result.extendedInfo
@@ -72,5 +87,7 @@ function runLighthouse (url, callback) {
         }
       })
     })
+
+    callback(errorCount)
   })
 }
