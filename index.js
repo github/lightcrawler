@@ -59,13 +59,21 @@ function runLighthouse (url, callback) {
   const lighthouse = ChildProcess.spawn(lighthousePath, args)
 
   let output = ''
+  lighthouse.stderr.pipe(process.stderr)
   lighthouse.stdout.on('data', (data) => {
     output += data
   })
   lighthouse.once('close', () => {
     let errorCount = 0
 
-    const report = JSON.parse(output)
+    let report
+    try {
+      report = JSON.parse(output)
+    } catch (parseError) {
+      console.error(`Parsing JSON report output failed: ${output}`)
+      callback(1)
+      return
+    }
 
     report.reportCategories.forEach((category) => {
       category.audits.forEach((audit) => {
