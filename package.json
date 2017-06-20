@@ -6,12 +6,17 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "lightcrawler": "./cli.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.4.1",
     "cheerio": "^1.0.0-rc.1",
     "lighthouse": "^2.1.0",
-    "simplecrawler": "^1.1.3"
+    "simplecrawler": "^1.1.3",
+    "yargs": "^8.0.2"
   }
 }

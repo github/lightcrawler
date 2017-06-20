@@ -1,6 +1,8 @@
 {
   "extends": "lighthouse:default",
   "settings": {
-    "onlyAudits": ["color-contrast"]
+    "onlyAudits": [
+      "external-anchors-use-rel-noopener"
+    ]
   }
 }
