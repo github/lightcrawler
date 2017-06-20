@@ -54,7 +54,9 @@ function runLighthouse (url, callback) {
     '--chrome-flags=--headless --disable-gpu',
     `--config-path=${path.join(__dirname, 'config.json')}`
   ]
-  const lighthouse = ChildProcess.spawn(path.join(__dirname, 'node_modules', '.bin', 'lighthouse'), args)
+
+  const lighthousePath = require.resolve('lighthouse/lighthouse-cli/index.js')
+  const lighthouse = ChildProcess.spawn(lighthousePath, args)
 
   let output = ''
   lighthouse.stdout.on('data', (data) => {
