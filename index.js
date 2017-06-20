@@ -59,7 +59,6 @@ function runLighthouse (url, callback) {
   const lighthouse = ChildProcess.spawn(lighthousePath, args)
 
   let output = ''
-  lighthouse.stderr.pipe(process.stderr)
   lighthouse.stdout.on('data', (data) => {
     output += data
   })
