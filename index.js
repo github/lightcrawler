@@ -4,6 +4,7 @@ const Crawler = require('simplecrawler')
 const path = require('path')
 const queue = require('async/queue')
 const fs = require('fs')
+const colors = require('colors')
 
 module.exports = (options) => {
   const configPath = path.resolve(options.config)
@@ -79,23 +80,39 @@ function runLighthouse (url, configPath, callback) {
     }
 
     report.reportCategories.forEach((category) => {
+      console.log();
+      console.log(category.name.bold.underline);
       category.audits.forEach((audit) => {
         if (audit.score !== 100) {
           errorCount++
-          console.log(`${url} failed ${audit.id}`)
+          console.log(url.replace(/\/$/, ''), '\u2717'.red, audit.id.bold, '-', audit.result.description.italic)
 
-          const {value} = audit.result.extendedInfo
-          if (Array.isArray(value)) {
-            value.forEach((result) => {
-              console.log(`  ${result.url}`)
-            })
-          } else if (Array.isArray(value.nodes)) {
-            value.nodes.forEach((result) => {
-              let message = result.failureSummary
-              message = message.replace(/^Fix any of the following:/g, '').trim()
-              console.log(`  ${message}`)
-              console.log(`  ${result.html}`)
-            })
+          if (audit.result.extendedInfo) {
+            const {value} = audit.result.extendedInfo
+            if (Array.isArray(value)) {
+              value.forEach((result) => {
+                if (result.url) {
+                  console.log(`   ${result.url}`)
+                }
+              })
+            } else if (Array.isArray(value.nodes)) {
+              const messagesToNodes = {}
+              value.nodes.forEach((result) => {
+                let message = result.failureSummary
+                message = message.replace(/^Fix any of the following:/g, '').trim()
+                if (messagesToNodes[message]) {
+                  messagesToNodes[message].push(result.html)
+                } else {
+                  messagesToNodes[message] = [result.html]
+                }
+              })
+              Object.keys(messagesToNodes).forEach((message) => {
+                console.log(`   ${message}`)
+                messagesToNodes[message].forEach(node => {
+                  console.log(`     ${node}`.dim)
+                })
+              })
+            }
           }
         }
       })
