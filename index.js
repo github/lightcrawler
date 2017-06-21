@@ -6,8 +6,8 @@ const queue = require('async/queue')
 const fs = require('fs')
 
 module.exports = (options) => {
-  const config = JSON.parse(fs.readFileSync(options.config))
   const configPath = path.resolve(options.config)
+  const config = JSON.parse(fs.readFileSync(configPath))
 
   const crawler = new Crawler(options.url)
   crawler.respectRobotsTxt = false
