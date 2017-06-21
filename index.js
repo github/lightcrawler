@@ -3,13 +3,17 @@ const ChildProcess = require('child_process')
 const Crawler = require('simplecrawler')
 const path = require('path')
 const queue = require('async/queue')
+const fs = require('fs')
 
 module.exports = (options) => {
+  const config = JSON.parse(fs.readFileSync(options.config))
+  const configPath = path.resolve(options.config)
+
   const crawler = new Crawler(options.url)
   crawler.respectRobotsTxt = false
   crawler.parseHTMLComments = false
   crawler.parseScriptTags = false
-  crawler.maxDepth = 1
+  crawler.maxDepth = config.settings.crawler.maxDepth || 1
 
   crawler.discoverResources = (buffer, item) => {
     const page = cheerio.load(buffer.toString('utf8'))
@@ -23,11 +27,11 @@ module.exports = (options) => {
   let totalErrorCount = 0
 
   const lighthouseQueue = queue((url, callback) => {
-    runLighthouse(url, (errorCount) => {
+    runLighthouse(url, configPath, (errorCount) => {
       totalErrorCount += errorCount
       callback()
     })
-  }, 5)
+  }, config.settings.crawler.maxChromeInstances)
 
   crawler.on('fetchcomplete', (queueItem, responseBuffer, response) => {
     lighthouseQueue.push(queueItem.url)
@@ -43,7 +47,7 @@ module.exports = (options) => {
   crawler.start()
 }
 
-function runLighthouse (url, callback) {
+function runLighthouse (url, configPath, callback) {
   const args = [
     url,
     '--output=json',
@@ -52,7 +56,7 @@ function runLighthouse (url, callback) {
     '--disable-cpu-throttling',
     '--disable-network-throttling',
     '--chrome-flags=--headless --disable-gpu',
-    `--config-path=${path.join(__dirname, 'config.json')}`
+    `--config-path=${configPath}`
   ]
 
   const lighthousePath = require.resolve('lighthouse/lighthouse-cli/index.js')

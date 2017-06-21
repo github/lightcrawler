@@ -1,8 +1,0 @@
-{
-  "extends": "lighthouse:default",
-  "settings": {
-    "onlyAudits": [
-      "external-anchors-use-rel-noopener"
-    ]
-  }
-}
