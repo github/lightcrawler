@@ -162,8 +162,12 @@ function printStats() {
   }, 0)
   console.log(`  Average Page Audit Time: ${Math.round(totalTime/stats.pageCount)} ms`);
   console.log(`  Total Audits Passed: ${stats.passedAuditsCount}`, '\u2713'.green);
-  console.log(`  Total Violations:`);
-  Object.keys(stats.violationCounts).forEach(category => {
-    console.log(`    ${category}: ${stats.violationCounts[category]}`, '\u2717'.red);
-  })
+  if (Object.keys(stats.violationCounts).length === 0) {
+    console.log(`  Total Violations: None! \\o/ 🎉`);
+  } else {
+    console.log(`  Total Violations:`);
+    Object.keys(stats.violationCounts).forEach(category => {
+      console.log(`    ${category}: ${stats.violationCounts[category]}`, '\u2717'.red);
+    })
+  }
 }
