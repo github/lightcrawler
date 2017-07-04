@@ -2,7 +2,7 @@
 Crawl a website and run it through Google lighthouse
 
 ```
-npm install --save lightcrawler
+npm install --save-dev lightcrawler
 
 lightcrawler --url https://atom.io/ --config lightcrawler-config.json
 ```
