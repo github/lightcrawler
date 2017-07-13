@@ -29,12 +29,13 @@ describe('lightcrawler CLI', function () {
 
   describe('when the page has violations', function () {
     it('reports failures and exits non-zero', async function () {
-      const {code, stdout} = await runLighthouse({
+      const {code, stdout, stderr} = await runLighthouse({
         config: path.join(__dirname, 'fixtures', 'config.json'),
         url: `${pagesURL}/document-write.html`
       })
 
       assert.equal(code, 1)
+      assert.equal(stderr, '')
       assert.equal(stdout.includes('no-document-write'), true, stdout)
       assert.equal(stdout.includes('Best Practices: 1'), true, stdout)
     })
@@ -42,12 +43,13 @@ describe('lightcrawler CLI', function () {
 
   describe('when the page has no violations', function () {
     it('exits with zero', async function () {
-      const {code, stdout} = await runLighthouse({
+      const {code, stdout, stderr} = await runLighthouse({
         config: path.join(__dirname, 'fixtures', 'config.json'),
         url: `${pagesURL}/empty.html`
       })
 
       assert.equal(code, 0)
+      assert.equal(stderr, '')
       assert.equal(stdout.includes('Total Violations: None'), true, stdout)
     })
   })
@@ -67,11 +69,17 @@ function runLighthouse ({config, url}) {
     lighthouseProcess.stdout.on('data', (chunk) => {
       stdout += chunk
     })
+    let stderr = ''
+    lighthouseProcess.stderr.on('data', (chunk) => {
+      stderr += chunk
+    })
     lighthouseProcess.on('error', (error) => {
       reject(error)
     })
     lighthouseProcess.on('close', (code) => {
-      resolve({code, stdout})
+      stdout = stdout.trim()
+      stderr = stderr.trim()
+      resolve({code, stdout, stderr})
     })
   })
 }

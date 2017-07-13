@@ -1,6 +1,6 @@
 # lightcrawler
 
-Crawl a website and run it through [Google lighthouse](https://github.com/GoogleChrome/lighthouse).
+Crawl a website and run it through [Google Lighthouse](https://github.com/GoogleChrome/lighthouse).
 
 ## Installing
 

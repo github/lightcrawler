@@ -1,7 +1,8 @@
 {
   "name": "lightcrawler",
   "version": "0.0.9",
-  "description": "",
+  "description": "Crawl sites and run pages through Google Lighthouse",
+  "repository": "https://github.com/github/lighthouse",
   "main": "index.js",
   "scripts": {
     "test": "mocha test"
