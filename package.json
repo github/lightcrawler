@@ -26,5 +26,9 @@
     "get-port": "^3.1.0",
     "mocha": "^3.4.2",
     "standard": "^10.0.2"
-  }
+  },
+  "files": [
+    "cli.js",
+    "index.js"
+  ]
 }
