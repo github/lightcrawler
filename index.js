@@ -38,7 +38,7 @@ module.exports = (options) => {
   let lighthouseFailed = false
 
   const lighthouseQueue = queue((url, callback) => {
-    runLighthouse(url, configPath, (error, errorCount) => {
+    runLighthouse(url, configPath, (error) => {
       if (error != null) lighthouseFailed = true
       callback()
     })
@@ -147,7 +147,11 @@ function runLighthouse (url, configPath, callback) {
       })
     })
 
-    callback(new Error(`Lighthouse violations: ${errorCount}`))
+    if (errorCount > 0) {
+      callback(new Error(`Lighthouse violations: ${errorCount}`))
+    } else {
+      callback()
+    }
   })
 }
 
