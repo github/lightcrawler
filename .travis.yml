@@ -8,6 +8,10 @@ notifications:
     on_success: never
     on_failure: never
 
+branches:
+  only:
+    - master
+
 node_js:
   - 8
 
