@@ -17,7 +17,7 @@ describe('lightcrawler CLI', function () {
     pagesURL = `http://localhost:${port}/pages`
     app.use('/pages', express.static(path.join(__dirname, 'fixtures', 'pages')))
     return new Promise((resolve, reject) => {
-      server = app.listen(port, resolve)
+      server = app.listen(port, 'localhost', resolve)
     })
   })
 
