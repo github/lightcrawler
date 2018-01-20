@@ -1,0 +1,12 @@
+{
+  "extends": "lighthouse:default",
+  "settings": {
+    "crawler": {
+      "maxDepth": 1,
+      "maxChromeInstances": 1
+    },
+    "onlyAudits": [
+      "no-document-write"
+    ]
+  }
+}

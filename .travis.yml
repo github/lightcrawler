@@ -1,0 +1,19 @@
+dist: trusty
+sudo: false
+
+language: node_js
+
+notifications:
+  email:
+    on_success: never
+    on_failure: never
+
+branches:
+  only:
+    - master
+
+node_js:
+  - 8
+
+addons:
+  chrome: beta
