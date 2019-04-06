@@ -1,3 +1,5 @@
+## ISC License
+
 Copyright 2019 GitHub, Inc.
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
