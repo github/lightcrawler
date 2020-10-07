@@ -18,7 +18,7 @@ where `lightcrawler-config.json` looks something like this:
     },
     "onlyCategories": [
       "Accessibility",
-      "Performance",
+      "Execution",
       "Best Practices"
     ],
     "onlyAudits": [
