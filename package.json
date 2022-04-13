@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "async": "^2.4.1",
+    "async": "^3.2.2",
     "cheerio": "^1.0.0-rc.1",
     "colors": "^1.1.2",
     "lighthouse": "^2.1.0",
